@@ -1,5 +1,6 @@
 package br.com.alura.forumHub.infra.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfigurations {
 
 
+    @Autowired
+    private SecurityFilter securityFilter;
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
@@ -27,11 +32,13 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.POST, "/usuarios").permitAll();
                     req.requestMatchers( "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
 
-                    // REGRAS QUE TENTAMOS ANTES:
-                    // req.anyRequest().authenticated();
+
+                    req.anyRequest().authenticated();
+
                 })
-                // ADICIONE ESTA LINHA TEMPORARIAMENTE PARA TESTAR
-                .authorizeHttpRequests(req -> req.anyRequest().permitAll())
+
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .build();
     }
 
@@ -44,7 +51,4 @@ public class SecurityConfigurations {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }
-
