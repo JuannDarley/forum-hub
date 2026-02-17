@@ -2,6 +2,7 @@ package br.com.alura.forumHub.controller;
 
 
 import br.com.alura.forumHub.model.topico.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity novoTopico(@RequestBody DtoTopico dados){
+    public ResponseEntity novoTopico(@RequestBody @Valid DtoTopico dados){
 
         var topico = new Topico(dados);
         repository.save(topico);
@@ -50,7 +51,7 @@ public class TopicoController {
     @PutMapping("/{id}")
     @Transactional
 
-    public ResponseEntity atualizar(@PathVariable Long id, @RequestBody DtoAtualizacaoTopico dados) {
+    public ResponseEntity atualizar(@PathVariable Long id, @RequestBody  @Valid DtoAtualizacaoTopico dados) {
 
         var topico = repository.getReferenceById(id);
         topico.atualizacaoTopico(dados);
