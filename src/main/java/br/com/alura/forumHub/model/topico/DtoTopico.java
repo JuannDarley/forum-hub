@@ -1,4 +1,4 @@
-package br.com.alura.forumHub.model;
+package br.com.alura.forumHub.model.topico;
 
 public record DtoTopico(
         String titulo,

@@ -1,4 +1,4 @@
-package br.com.alura.forumHub.model;
+package br.com.alura.forumHub.model.topico;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -36,6 +36,20 @@ public class Topico {
         this.status = dados.status();
         this.autor = dados.autor();
         this.curso = dados.curso();
+    }
+
+    public void atualizacaoTopico(DtoAtualizacaoTopico dados){
+        if (dados.titulo() != null) {
+            this.titulo = dados.titulo();
+        }
+
+        if (dados.mensagem() != null) {
+            this.mensagem = dados.mensagem();
+        }
+
+        if (dados.status() != null) {
+            this.status = dados.status();
+        }
     }
 }
 
