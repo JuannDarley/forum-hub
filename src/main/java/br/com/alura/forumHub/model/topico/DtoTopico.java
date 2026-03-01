@@ -11,8 +11,6 @@ public record DtoTopico(
         @NotNull
         StatusTopico status,
         @NotBlank
-        String autor,
-        @NotBlank
         String curso
 ) {
 }

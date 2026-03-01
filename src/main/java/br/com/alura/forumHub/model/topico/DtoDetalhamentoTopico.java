@@ -11,8 +11,8 @@ public record DtoDetalhamentoTopico(
         String mensagem,
         LocalDateTime dataCriacao,
         StatusTopico status,
-        String autor,
-        String curso
+        String curso,
+        String autor
 ) {
 
     public DtoDetalhamentoTopico(Topico topico) {
@@ -22,8 +22,8 @@ public record DtoDetalhamentoTopico(
                 topico.getMensagem(),
                 topico.getDataCriacao(),
                 topico.getStatus(),
-                topico.getAutor(),
-                topico.getCurso()
+                topico.getCurso(),
+                topico.getAutor().getNome()
         );
     }
 }

@@ -1,7 +1,9 @@
 package br.com.alura.forumHub.controller;
 
 
+import br.com.alura.forumHub.infra.security.UsuarioDetails;
 import br.com.alura.forumHub.model.topico.*;
+import br.com.alura.forumHub.model.usuario.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +24,19 @@ public class TopicoController {
     @Autowired
     private TopicoRepository repository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @PostMapping
     @Transactional
-    public ResponseEntity novoTopico(@RequestBody @Valid DtoTopico dados){
+    public ResponseEntity novoTopico(@RequestBody @Valid DtoTopico dados, @AuthenticationPrincipal UsuarioDetails usuarioDetails){
 
-        var topico = new Topico(dados);
+        if (repository.existsByTituloAndMensagem(dados.titulo(), dados.mensagem())) {
+            return ResponseEntity.status(409).body("Já existe um tópico com o mesmo título e mensagem.");
+        }
+
+        var usuario = usuarioRepository.findByEmail(usuarioDetails.getUsername());
+        var topico = new Topico(dados, usuario);
         repository.save(topico);
 
         return ResponseEntity.ok(topico);

@@ -1,5 +1,6 @@
 package br.com.alura.forumHub.model.topico;
 
+import br.com.alura.forumHub.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,15 +27,17 @@ public class Topico {
     @Enumerated(EnumType.STRING)
     private StatusTopico status;
 
-    private String autor;
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private Usuario autor;
     private String curso;
 
-    public Topico (DtoTopico dados){
+    public Topico (DtoTopico dados, Usuario autor){
         this.titulo = dados.titulo();
         this.mensagem = dados.mensagem();
         this.dataCriacao = LocalDateTime.now();
         this.status = dados.status();
-        this.autor = dados.autor();
+        this.autor = autor;
         this.curso = dados.curso();
     }
 
