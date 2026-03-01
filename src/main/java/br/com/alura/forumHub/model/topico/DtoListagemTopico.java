@@ -14,7 +14,7 @@ public record DtoListagemTopico(
                 topico.getTitulo(),
                 topico.getDataCriacao(),
                 topico.getStatus(),
-                topico.getCurso()
+                topico.getCurso().getNome()
         );
     }
 }

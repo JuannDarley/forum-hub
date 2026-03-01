@@ -2,6 +2,7 @@ package br.com.alura.forumHub.controller;
 
 
 import br.com.alura.forumHub.infra.security.UsuarioDetails;
+import br.com.alura.forumHub.model.curso.CursoRepository;
 import br.com.alura.forumHub.model.topico.*;
 import br.com.alura.forumHub.model.usuario.UsuarioRepository;
 import jakarta.validation.Valid;
@@ -27,16 +28,20 @@ public class TopicoController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private CursoRepository cursoRepository;
+
     @PostMapping
     @Transactional
-    public ResponseEntity novoTopico(@RequestBody @Valid DtoTopico dados, @AuthenticationPrincipal UsuarioDetails usuarioDetails){
+    public ResponseEntity novoTopico(@RequestBody @Valid DtoTopico dados, @AuthenticationPrincipal UsuarioDetails usuarioDetails) {
 
         if (repository.existsByTituloAndMensagem(dados.titulo(), dados.mensagem())) {
             return ResponseEntity.status(409).body("Já existe um tópico com o mesmo título e mensagem.");
         }
 
-        var usuario = usuarioRepository.findByEmail(usuarioDetails.getUsername());
-        var topico = new Topico(dados, usuario);
+        var usuario = usuarioDetails.getUsuario();
+        var curso = cursoRepository.findByNome(dados.curso().name().replace("_", " "));
+        var topico = new Topico(dados, usuario, curso);
         repository.save(topico);
 
         return ResponseEntity.ok(topico);

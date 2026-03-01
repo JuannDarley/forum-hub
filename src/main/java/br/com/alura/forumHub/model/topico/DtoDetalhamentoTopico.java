@@ -22,7 +22,7 @@ public record DtoDetalhamentoTopico(
                 topico.getMensagem(),
                 topico.getDataCriacao(),
                 topico.getStatus(),
-                topico.getCurso(),
+                topico.getCurso().getNome(),
                 topico.getAutor().getNome()
         );
     }
